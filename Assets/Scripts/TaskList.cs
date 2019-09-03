@@ -66,9 +66,11 @@ public class TaskList : MonoBehaviour
             if(date < orderedDates[i])
             {
                 orderedDates.Insert(i, date);
-                break;
+                return i;
             }
         }
+        //append to end
+        orderedDates.Add(date);
         return i;
     }
 
