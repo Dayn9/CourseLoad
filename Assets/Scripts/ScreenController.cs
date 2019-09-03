@@ -10,11 +10,13 @@ public class ScreenController : MonoBehaviour
 
     [SerializeField] private GameObject taskScreen;
     [SerializeField] private GameObject createScreen;
+    [SerializeField] private GameObject settingsScreen;
 
     private void Awake()
     {
         taskScreen.SetActive(true);
         createScreen.SetActive(true);
+        settingsScreen.SetActive(true);
     }
 
     private void Start()
@@ -26,11 +28,20 @@ public class ScreenController : MonoBehaviour
     {
         taskScreen.SetActive(true);
         createScreen.SetActive(false);
+        settingsScreen.SetActive(false);
     }
 
     public void ShowCreateScreen()
     {
         taskScreen.SetActive(false);
         createScreen.SetActive(true);
+        settingsScreen.SetActive(false);
+    }
+
+    public void ShowSettingsScreen()
+    {
+        taskScreen.SetActive(false);
+        createScreen.SetActive(false);
+        settingsScreen.SetActive(true);
     }
 }
