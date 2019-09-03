@@ -13,9 +13,11 @@ public class TagSelect : MonoBehaviour
 
     public Tag SelectedTag { get { return selectedTag; } }
 
+    public Tag[] Tags { get { return tags; } }
+
     private void Awake()
     {
-        if(tagLookup == null)
+        if (tagLookup == null)
         {
             tagLookup = new Dictionary<string, Tag>();
             foreach (Tag tag in tags)
@@ -24,12 +26,14 @@ public class TagSelect : MonoBehaviour
             }
         }
 
-        foreach(Tag tag in tags)
+        foreach (Tag tag in tags)
         {
             tag.toggle.transform.GetComponentInChildren<Image>().color = tag.color;
             tag.toggle.GetComponentInChildren<Text>().text = tag.name;
         }
     }
+
+    
 
     private void Start()
     {
@@ -50,3 +54,4 @@ public struct Tag
     public Color color;
     public Toggle toggle;
 }
+
