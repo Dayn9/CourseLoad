@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class TagEdit : MonoBehaviour
 {
     [SerializeField] private ScreenController screenControl;
-
     [SerializeField] private TagSelect tagSelect;
+    [SerializeField] private TaskList taskList;
 
     [SerializeField] private EditTag[] editTags;
 
@@ -22,18 +22,27 @@ public class TagEdit : MonoBehaviour
         }
     }
 
-
     public void ApplyChanges()
     {
-        Tag[] tags = tagSelect.Tags;
+        //loop over all edits and check for changes
         for (int i = 0; i < editTags.Length; i++)
         {
-            tags[i].color = editTags[i].image.color;
-            if(editTags[i].input.text.Trim() != "")
+            tagSelect.Tags[i].color = editTags[i].image.color;
+
+            string currentTag = tagSelect.Tags[i].name;
+            string newTag = editTags[i].input.text;
+            //check if the input is not empty or already set to that value
+            if (newTag.Trim() != "" && !newTag.Equals(currentTag))
             {
-                tags[i].name = editTags[i].input.text;
+                //update the taskUI's in the task list
+                tagSelect.UpdateTag(currentTag, newTag);
+                taskList.UpdateTag(currentTag, newTag);
+                //update the tag name stored in tag select
+                tagSelect.Tags[i].name = editTags[i].input.text;
             }         
         }
+        //refresh the tags to update labels in creation window
+        tagSelect.SetSelectionUI(); 
 
         screenControl.ShowTaskScreen();
     }

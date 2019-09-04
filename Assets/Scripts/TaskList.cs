@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class TaskList : MonoBehaviour
@@ -32,6 +30,17 @@ public class TaskList : MonoBehaviour
     private void Start()
     {
         LoadData();
+    }
+
+    public void UpdateTag(string oldName, string newName)
+    {
+        foreach(GameObject taskUI in tasks.Values)
+        {
+            Task task = taskUI.GetComponent<Task>();
+            if (task.Tag.Equals(oldName)){
+                task.SetTag(newName);
+            }
+        }
     }
 
     public void AddTask(string name, int day, int month, int year, string tag)
