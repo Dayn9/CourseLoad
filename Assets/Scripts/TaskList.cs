@@ -34,13 +34,17 @@ public class TaskList : MonoBehaviour
 
     public void UpdateTag(string oldName, string newName)
     {
-        foreach(GameObject taskUI in tasks.Values)
+        foreach (GameObject taskUI in tasks.Values)
         {
             Task task = taskUI.GetComponent<Task>();
-            if (task.Tag.Equals(oldName)){
+            if (task.Tag.Equals(oldName))
+            {
                 task.SetTag(newName);
             }
+
         }
+        //save the new names
+        SaveData();
     }
 
     public void AddTask(string name, int day, int month, int year, string tag)
