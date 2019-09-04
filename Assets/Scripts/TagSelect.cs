@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class TagSelect : MonoBehaviour
 {
@@ -11,12 +13,17 @@ public class TagSelect : MonoBehaviour
 
     private Tag selectedTag;
 
+    private const string GameSaveFileName = "/TagData";
+    private const string FileExtension = ".dat";
+
     public Tag SelectedTag { get { return selectedTag; } }
 
     public Tag[] Tags { get { return tags; } }
 
     private void Awake()
     {
+        LoadData();
+
         if (tagLookup == null)
         {
             tagLookup = new Dictionary<string, Tag>();
@@ -26,14 +33,27 @@ public class TagSelect : MonoBehaviour
             }
         }
 
+        SetSelectionUI();
+    }
+
+    public void UpdateTag(string oldName, string newName)
+    {
+        Tag t = tagLookup[oldName];
+        t.name = newName;
+        tagLookup.Remove(oldName);
+        tagLookup.Add(newName, t);
+    }
+
+    public void SetSelectionUI()
+    {
         foreach (Tag tag in tags)
         {
             tag.toggle.transform.GetComponentInChildren<Image>().color = tag.color;
             tag.toggle.GetComponentInChildren<Text>().text = tag.name;
         }
-    }
 
-    
+        SaveData();
+    }
 
     private void Start()
     {
@@ -45,6 +65,90 @@ public class TagSelect : MonoBehaviour
     {
         selectedTag = tagLookup[name];
     }
+
+    public void SaveData()
+    {
+        TagData[] tagData = new TagData[tags.Length];
+
+        for (int i = 0; i < tagData.Length; i++)
+        {
+            tagData[i] = new TagData();
+            tagData[i].name = tags[i].name;
+            //tagData[i].color = tags[i].color;
+        }    
+        Save(tagData);
+    }
+
+    public void LoadData()
+    {
+        TagData[] tagData = Load();
+        if (tagData != null)
+        {
+            for(int i = 0; i<tagData.Length; i++)
+            {
+                tags[i].name = tagData[i].name;
+                //tags[i].color = tagData[i].color;
+            }
+        }
+    }
+
+    private void Save(TagData[] saveData)
+    {
+        string dataPath = Application.persistentDataPath + GameSaveFileName + FileExtension;
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream fileStream = File.Open(dataPath, FileMode.OpenOrCreate);
+
+        try
+        {
+            binaryFormatter.Serialize(fileStream, saveData);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("Serialization Failed: " + e.Message);
+        }
+        finally
+        {
+            //always close the fileStream
+            fileStream.Close();
+        }
+    }
+
+    private TagData[] Load()
+    {
+        TagData[] tagData = null;
+        string dataPath = Application.persistentDataPath + GameSaveFileName + FileExtension;
+
+        //make sure the file actually exists
+        if (File.Exists(dataPath))
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream fileStream = File.Open(dataPath, FileMode.Open);
+
+            try
+            {
+                tagData = (TagData[])binaryFormatter.Deserialize(fileStream);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Game Deserialization Failed: " + e.Message);
+            }
+            finally
+            {
+                //always close the fileStream
+                fileStream.Close();
+            }
+        }
+
+        return tagData;
+    }
+}
+
+
+[System.Serializable]
+public class TagData
+{
+    public string name;
+    //public Color color;
 }
 
 [System.Serializable]

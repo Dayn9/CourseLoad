@@ -31,6 +31,8 @@ public class Task : MonoBehaviour
 
     public int Date { get { return (year * 10000) + (month * 100) + day; } }
 
+    public string Tag { get { return tagName; } }
+
     public int Id { set { id = value; } }
 
     public void SetDate(int day, int month, int year)
@@ -47,7 +49,15 @@ public class Task : MonoBehaviour
         this.tagName = tagName;
 
         tagText.text = tagName;
-        tagImage.color = TagSelect.tagLookup[tagName].color;
+        if (TagSelect.tagLookup.ContainsKey(tagName))
+        {
+            tagImage.color = TagSelect.tagLookup[tagName].color;
+        }
+        else
+        {
+            tagImage.color = TagSelect.tagLookup["Other"].color;
+        }
+        
     }
 
     public void Done()
