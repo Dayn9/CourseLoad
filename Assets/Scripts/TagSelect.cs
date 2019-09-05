@@ -9,11 +9,11 @@ public class TagSelect : MonoBehaviour
 {
     [SerializeField] private Tag[] tags;
 
-    public static Dictionary<string, Tag> tagLookup;
+    private Dictionary<string, Tag> tagLookup;
 
     private Tag selectedTag;
 
-    private const string GameSaveFileName = "/TagData";
+    private const string GameSaveFileName = "/TagsData";
     private const string FileExtension = ".dat";
 
     public Tag SelectedTag { get { return selectedTag; } }
@@ -34,6 +34,24 @@ public class TagSelect : MonoBehaviour
         }
 
         SetSelectionUI();
+    }
+
+    public Tag GetTag(string tagName)
+    {
+        //return a default tag if tag lookup is empty for some reason
+        if(tagLookup.Count == 0)
+        {
+            return new Tag();
+        }
+
+        //return the tag from lookup if it exists
+        if (tagLookup.ContainsKey(tagName))
+        {
+            return tagLookup[tagName];
+        }
+
+        //otherwise return the Other Tag
+        return tagLookup["Other"];
     }
 
     public void UpdateTag(string oldName, string newName)

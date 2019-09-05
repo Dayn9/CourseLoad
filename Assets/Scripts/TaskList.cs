@@ -12,13 +12,14 @@ public class TaskList : MonoBehaviour
 
     [SerializeField] private RectTransform content;
     [SerializeField] private GameObject taskTemplate;
+    [SerializeField] private TagSelect tagSelect;
 
     private int currentId = 0;
     private Dictionary<int, GameObject> tasksUIs;
     private Dictionary<int, Task> tasks; 
     private List<int> orderedDates;
 
-    private const string GameSaveFileName = "/SaveData";
+    private const string GameSaveFileName = "/TasksData";
     private const string FileExtension = ".dat";
 
     private void Awake()
@@ -52,7 +53,7 @@ public class TaskList : MonoBehaviour
         //apply variables
         task.Name = name;
         task.SetDate(day, month, year);
-        task.SetTag(TagSelect.tagLookup[tagName]);
+        task.SetTag(tagSelect.GetTag(tagName));
         task.Id = currentId;
         tasks.Add(currentId, task);
 
@@ -152,7 +153,6 @@ public class TaskList : MonoBehaviour
         {
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             FileStream fileStream = File.Open(dataPath, FileMode.Open);
-
             try
             {
                 saveData = (SaveData[])binaryFormatter.Deserialize(fileStream);
