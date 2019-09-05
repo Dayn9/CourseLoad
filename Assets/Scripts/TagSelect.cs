@@ -74,7 +74,7 @@ public class TagSelect : MonoBehaviour
         {
             tagData[i] = new TagData();
             tagData[i].name = tags[i].name;
-            //tagData[i].color = tags[i].color;
+            tagData[i].color = ColorToArr(tags[i].color);
         }    
         Save(tagData);
     }
@@ -87,7 +87,7 @@ public class TagSelect : MonoBehaviour
             for(int i = 0; i<tagData.Length; i++)
             {
                 tags[i].name = tagData[i].name;
-                //tags[i].color = tagData[i].color;
+                tags[i].color = ArrToColor(tagData[i].color);
             }
         }
     }
@@ -141,14 +141,23 @@ public class TagSelect : MonoBehaviour
 
         return tagData;
     }
-}
 
+    private float[] ColorToArr(Color col)
+    {
+        return new float[4] { col.r, col.g, col.b, col.a };
+    }
+
+    private Color ArrToColor(float[] col)
+    {
+        return new Color(col[0], col[1], col[2], col[3]);
+    }
+}
 
 [System.Serializable]
 public class TagData
 {
     public string name;
-    //public Color color;
+    public float[] color;
 }
 
 [System.Serializable]
