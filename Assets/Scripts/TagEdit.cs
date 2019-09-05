@@ -7,6 +7,7 @@ public class TagEdit : MonoBehaviour
 {
     [SerializeField] private ScreenController screenControl;
     [SerializeField] private TagSelect tagSelect;
+    [SerializeField] private ColorSelect colorSelect;
     [SerializeField] private TaskList taskList;
 
     [SerializeField] private EditTag[] editTags;
@@ -20,6 +21,14 @@ public class TagEdit : MonoBehaviour
             editTags[i].image.color = tags[i].color;
             editTags[i].input.text = tags[i].name;
         }
+
+        colorSelect.gameObject.SetActive(false);
+    }
+
+    public void EditColor(Image target)
+    {
+        colorSelect.gameObject.SetActive(true);
+        colorSelect.SetTargetImage(target);
     }
 
     public void ApplyChanges()
@@ -34,15 +43,17 @@ public class TagEdit : MonoBehaviour
             //check if the input is not empty or already set to that value
             if (newTag.Trim() != "" && !newTag.Equals(currentTag))
             {
-                //update the taskUI's in the task list
+                //update the tag lookup
                 tagSelect.UpdateTag(currentTag, newTag);
-                taskList.UpdateTag(currentTag, newTag);
-                //update the tag name stored in tag select
-                tagSelect.Tags[i].name = editTags[i].input.text;
+                
+                tagSelect.Tags[i].name = newTag;
             }         
         }
         //refresh the tags to update labels in creation window
-        tagSelect.SetSelectionUI(); 
+        tagSelect.SetSelectionUI();
+        taskList.RefreshTags();
+        //save the new names
+        taskList.SaveData();
 
         screenControl.ShowTaskScreen();
     }

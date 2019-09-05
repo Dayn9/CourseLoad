@@ -20,7 +20,8 @@ public class Task : MonoBehaviour
     private int year;
     private int month;
     private int day;
-    private string tagName;
+
+    private Tag tagRef;
 
     private int id;
 
@@ -31,7 +32,7 @@ public class Task : MonoBehaviour
 
     public int Date { get { return (year * 10000) + (month * 100) + day; } }
 
-    public string Tag { get { return tagName; } }
+    public string TagName { get { return tagRef.name; } }
 
     public int Id { set { id = value; } }
 
@@ -44,20 +45,16 @@ public class Task : MonoBehaviour
         dateText.text = MonthSelect.months[month-1].ToString().Substring(0, 3) + " " + day;
     }
 
-    public void SetTag(string tagName)
+    public void SetTag(Tag tag)
     {
-        this.tagName = tagName;
+        tagRef = tag;
+        RefreshTag();
+    }
 
-        tagText.text = tagName;
-        if (TagSelect.tagLookup.ContainsKey(tagName))
-        {
-            tagImage.color = TagSelect.tagLookup[tagName].color;
-        }
-        else
-        {
-            tagImage.color = TagSelect.tagLookup["Other"].color;
-        }
-        
+    public void RefreshTag()
+    {
+        tagText.text = tagRef.name;
+        tagImage.color = tagRef.color;
     }
 
     public void Done()
@@ -72,7 +69,7 @@ public class Task : MonoBehaviour
         saveData.day = day;
         saveData.month = month;
         saveData.year = year;
-        saveData.tagName = tagName;
+        saveData.tagName = TagName;
         return saveData;
     }
 }

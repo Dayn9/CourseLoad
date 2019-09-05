@@ -161,7 +161,7 @@ public class TagData
 }
 
 [System.Serializable]
-public struct Tag
+public class Tag
 {
     public string name;
     public Color color;

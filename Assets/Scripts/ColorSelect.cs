@@ -21,6 +21,8 @@ public class ColorSelect : MonoBehaviour
     private Image bgG;
     private Image bgB;
 
+    private Image targetImage;
+
     private void Awake()
     {
         Slider[] sliders = GetComponentsInChildren<Slider>();
@@ -41,6 +43,12 @@ public class ColorSelect : MonoBehaviour
         }
 
         preview.color = displayColor;
+    }
+
+    public void SetTargetImage(Image target)
+    {
+        targetImage = target;
+        SetColor(targetImage.color);
     }
 
     private void SetColor(Color color)
@@ -70,6 +78,12 @@ public class ColorSelect : MonoBehaviour
         numR.text = Mathf.FloorToInt(displayColor.r * 255).ToString();
         numG.text = Mathf.FloorToInt(displayColor.g * 255).ToString();
         numB.text = Mathf.FloorToInt(displayColor.b * 255).ToString();
+
+        //link target image color 
+        if(targetImage != null)
+        {
+            targetImage.color = displayColor;
+        }
 
         bgR.material.SetColor("_Color0", new Color(0, displayColor.g, displayColor.b));
         bgR.material.SetColor("_Color1", new Color(1, displayColor.g, displayColor.b));
