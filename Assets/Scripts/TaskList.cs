@@ -14,7 +14,8 @@ public class TaskList : MonoBehaviour
     [SerializeField] private GameObject taskTemplate;
 
     private int currentId = 0;
-    private Dictionary<int, GameObject> tasks;
+    private Dictionary<int, GameObject> tasksUIs;
+    private Dictionary<int, Task> tasks; 
     private List<int> orderedDates;
 
     private const string GameSaveFileName = "/SaveData";
@@ -22,7 +23,9 @@ public class TaskList : MonoBehaviour
 
     private void Awake()
     {
-        tasks = new Dictionary<int, GameObject>();
+        tasksUIs = new Dictionary<int, GameObject>();
+        tasks = new Dictionary<int, Task>();
+
         orderedDates = new List<int>();
         taskTemplate.SetActive(false);
     }
@@ -32,22 +35,15 @@ public class TaskList : MonoBehaviour
         LoadData();
     }
 
-    public void UpdateTag(string oldName, string newName)
+    public void RefreshTags()
     {
-        foreach (GameObject taskUI in tasks.Values)
+        foreach (Task task in tasks.Values)
         {
-            Task task = taskUI.GetComponent<Task>();
-            if (task.Tag.Equals(oldName))
-            {
-                task.SetTag(newName);
-            }
-
+            task.RefreshTag();
         }
-        //save the new names
-        SaveData();
     }
 
-    public void AddTask(string name, int day, int month, int year, string tag)
+    public void AddTask(string name, int day, int month, int year, string tagName)
     {
         //create the new Task object
         GameObject taskUI = Instantiate(taskTemplate, content);
@@ -56,13 +52,14 @@ public class TaskList : MonoBehaviour
         //apply variables
         task.Name = name;
         task.SetDate(day, month, year);
-        task.SetTag(tag);
+        task.SetTag(TagSelect.tagLookup[tagName]);
         task.Id = currentId;
+        tasks.Add(currentId, task);
 
         //activate and Insert into date appropriate place
         taskUI.SetActive(true);
         taskUI.transform.SetSiblingIndex(PlaceTask(task.Date));
-        tasks.Add(currentId, taskUI);
+        tasksUIs.Add(currentId, taskUI);
         currentId++;
     }
 
@@ -89,12 +86,13 @@ public class TaskList : MonoBehaviour
 
     public void RemoveTask(int id)
     {
-        if (tasks.ContainsKey(id))
+        if (tasksUIs.ContainsKey(id))
         {
-            GameObject taskUI = tasks[id];
-            orderedDates.Remove(taskUI.GetComponent<Task>().Date);
-            Destroy(taskUI);
+            GameObject taskUI = tasksUIs[id];
+            orderedDates.Remove(tasks[id].Date);
             tasks.Remove(id);
+            Destroy(taskUI);
+            tasksUIs.Remove(id);
             SaveData();
         }
     }
@@ -103,9 +101,9 @@ public class TaskList : MonoBehaviour
     {
         List<SaveData> saveData = new List<SaveData>();
        
-        foreach(GameObject task in tasks.Values)
+        foreach(Task task in tasks.Values)
         {
-            saveData.Add(task.GetComponent<Task>().GetSaveData());
+            saveData.Add(task.GetSaveData());
         }
 
         Save(saveData.ToArray());
