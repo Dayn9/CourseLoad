@@ -28,7 +28,8 @@ public class TagToggle : MonoBehaviour
     {
         if (tog)
         {
-            tagSelect.TagSelected(nameText.text);
+            tagSelect.SetSelected(nameText.text);
         }
+        toggle.isOn = tog;
     }
 }

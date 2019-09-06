@@ -9,6 +9,9 @@ public class TaskList : MonoBehaviour
     /// <summary>
     /// handles the creation and completion of tasks
     /// </summary>
+    
+    [SerializeField] private Options options;
+    [SerializeField] private ScreenController screenController;
 
     [SerializeField] private RectTransform content;
     [SerializeField] private GameObject taskTemplate;
@@ -21,6 +24,8 @@ public class TaskList : MonoBehaviour
 
     private const string GameSaveFileName = "/TasksData";
     private const string FileExtension = ".dat";
+
+    private int editID = -1; //-1 when not editing
 
     private void Awake()
     {
@@ -44,24 +49,61 @@ public class TaskList : MonoBehaviour
         }
     }
 
+    public void StopEdit()
+    {
+        editID = -1;
+    }
+
     public void AddTask(string name, int day, int month, int year, string tagName)
     {
-        //create the new Task object
-        GameObject taskUI = Instantiate(taskTemplate, content);
-        Task task = taskUI.GetComponent<Task>();
+        //Creating new task
+        if(editID < 0)
+        {
+            //create the new Task object
+            GameObject taskUI = Instantiate(taskTemplate, content);
+            Task task = taskUI.GetComponent<Task>();
 
-        //apply variables
-        task.Name = name;
-        task.SetDate(day, month, year);
-        task.SetTag(tagSelect.GetTag(tagName));
-        task.Id = currentId;
-        tasks.Add(currentId, task);
+            //apply variables
+            task.Name = name;
+            task.SetDate(day, month, year);
+            task.SetTag(tagSelect.GetTag(tagName));
+            task.ID = currentId;
+            tasks.Add(currentId, task);
 
-        //activate and Insert into date appropriate place
-        taskUI.SetActive(true);
-        taskUI.transform.SetSiblingIndex(PlaceTask(task.Date));
-        tasksUIs.Add(currentId, taskUI);
-        currentId++;
+            //activate and Insert into date appropriate place
+            taskUI.SetActive(true);
+            taskUI.transform.SetSiblingIndex(PlaceTask(task.Date));
+            tasksUIs.Add(currentId, taskUI);
+            currentId++;
+        }
+        //Update an existing task
+        else
+        {
+            GameObject taskUI = tasksUIs[editID];
+            Task task = tasks[editID];
+
+            //apply variables
+            task.Name = name;
+            task.SetDate(day, month, year);
+            task.SetTag(tagSelect.GetTag(tagName));
+
+            //activate and Insert into date appropriate place
+            taskUI.SetActive(true);
+            orderedDates.Remove(task.Date);
+            taskUI.transform.SetSiblingIndex(PlaceTask(task.Date));
+
+            StopEdit();
+        }
+    }
+
+    public void Edit(int id)
+    {
+        editID = id;
+        Task task = tasks[id];
+        int[] date = task.GetDate();
+
+        options.LoadTask(task.Name, date[0], date[1], date[2], task.TagName);
+        screenController.ShowCreateScreen();
     }
 
     public int PlaceTask(int date)

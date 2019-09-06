@@ -17,7 +17,10 @@ public class DaySelect : MonoBehaviour
     private ToggleGroup toggleGroup;
     private int viewingMonth;
 
-    public int SelectedDay { get { return selectedDay; } }
+    public int SelectedDay {
+        get { return selectedDay; }
+        set { selectedDay = value; }
+    }
 
     private void Awake()
     {
