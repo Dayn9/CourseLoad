@@ -32,8 +32,14 @@ public class MonthSelect : MonoBehaviour
     private int selectedMonth;
     private int selectedYear;
 
-    public int SelectedMonth { get { return selectedMonth + 1; } }
-    public int SelectedYear { get { return selectedYear; } }
+    public int SelectedMonth {
+        get { return selectedMonth + 1; }
+        set { selectedMonth = value - 1; }
+    }
+    public int SelectedYear {
+        get { return selectedYear; }
+        set { selectedYear = value; }
+    }
 
     private void Awake()
     {
@@ -42,6 +48,11 @@ public class MonthSelect : MonoBehaviour
     }
 
     private void Start()
+    {
+        UpdateUI();
+    }
+
+    private void OnEnable()
     {
         UpdateUI();
     }

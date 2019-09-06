@@ -72,16 +72,44 @@ public class TagSelect : MonoBehaviour
 
         SaveData();
     }
-
+    /*
     private void Start()
     {
-        tags[0].toggle.GetComponent<TagToggle>().SelectTag(true);
-        selectedTag = tags[0];
+        SetToggle("Other");
+    }*/
+
+    public void SetToggle(string name)
+    {
+        //toggle off the selected tag
+        if(selectedTag != null)
+        {
+            selectedTag.toggle.GetComponent<TagToggle>().SelectTag(false);
+        }
+
+        //toggle on the new tag
+        if (tagLookup.ContainsKey(name))
+        {
+            tagLookup[name].toggle.GetComponent<TagToggle>().SelectTag(true);
+        }
+        else
+        {
+            //default to other
+            tagLookup["Other"].toggle.GetComponent<TagToggle>().SelectTag(true);
+        }
+
     }
 
-    public void TagSelected(string name)
+    public void SetSelected(string name)
     {
-        selectedTag = tagLookup[name];
+        if (tagLookup.ContainsKey(name))
+        {
+            selectedTag = tagLookup[name];
+        }
+        else
+        {
+            //default to other
+            selectedTag = tagLookup["Other"];
+        }
     }
 
     public void SaveData()

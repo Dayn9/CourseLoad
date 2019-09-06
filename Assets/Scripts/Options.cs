@@ -19,6 +19,19 @@ public class Options : MonoBehaviour
     [SerializeField] private DaySelect daySelect;
     [SerializeField] private TagSelect tagSelect;
 
+
+    public void LoadTask(string name, int day, int month, int year, string tagName)
+    {
+        nameInput.text = name;
+
+        daySelect.SelectedDay = day;
+
+        monthSelect.SelectedYear = year;
+        monthSelect.SelectedMonth = month;
+
+        tagSelect.SetToggle(tagName);
+    }
+
     /// <summary>
     /// Called by the DONE button to create a task
     /// </summary>
@@ -39,7 +52,7 @@ public class Options : MonoBehaviour
 
     public bool Validate(string name, Tag tag)
     {
-        if(name.Length == 0)
+        if(name.Length == 0 || tag == null || tag.name.Length == 0)
         {
             return false;
         }

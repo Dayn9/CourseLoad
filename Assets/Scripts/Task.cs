@@ -15,7 +15,7 @@ public class Task : MonoBehaviour
     [SerializeField] private Text nameText;
     [SerializeField] private Text dateText;
     [SerializeField] private Image tagImage;
-    [SerializeField] private Text tagText;
+    [SerializeField] private Text tagText; 
 
     private int year;
     private int month;
@@ -34,7 +34,7 @@ public class Task : MonoBehaviour
 
     public string TagName { get { return tagRef.name; } }
 
-    public int Id { set { id = value; } }
+    public int ID { set { id = value; } }
 
     public void SetDate(int day, int month, int year)
     {
@@ -43,6 +43,10 @@ public class Task : MonoBehaviour
         this.year = year;
 
         dateText.text = MonthSelect.months[month-1].ToString().Substring(0, 3) + " " + day;
+    }
+    public int[] GetDate()
+    {
+        return new int[] { day, month, year };
     }
 
     public void SetTag(Tag tag)
@@ -60,6 +64,11 @@ public class Task : MonoBehaviour
     public void Done()
     {
         taskList.RemoveTask(id);
+    }
+
+    public void Edit()
+    {
+        taskList.Edit(id);
     }
 
     public SaveData GetSaveData()
