@@ -44,7 +44,8 @@ public class Options : MonoBehaviour
             taskList.AddTask(nameInput.text, 
                 daySelect.SelectedDay, monthSelect.SelectedMonth, monthSelect.SelectedYear,
                 tagSelect.SelectedTag.name);
-            screenControl.ShowTaskScreen();
+
+            screenControl.SetScreen(ScreenUI.Task);
 
             taskList.SaveData();
         }

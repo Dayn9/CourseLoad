@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum ScreenUI { Task, Create, Settings, Info }
 
 public class ScreenController : MonoBehaviour
 {
@@ -12,8 +15,13 @@ public class ScreenController : MonoBehaviour
     [SerializeField] private GameObject createScreen;
     [SerializeField] private GameObject settingsScreen;
 
+    public Action OnScreenChange;
+    
+    public ScreenUI CurrentScreen { get; private set; }
+
     private void Awake()
     {
+        //activate all screens for setup
         taskScreen.SetActive(true);
         createScreen.SetActive(true);
         settingsScreen.SetActive(true);
@@ -21,27 +29,22 @@ public class ScreenController : MonoBehaviour
 
     private void Start()
     {
-        ShowTaskScreen();
+        SetScreen(ScreenUI.Task);
     }
 
-    public void ShowTaskScreen()
+    public void SetScreen(ScreenUI screen)
     {
-        taskScreen.SetActive(true);
-        createScreen.SetActive(false);
-        settingsScreen.SetActive(false);
+        CurrentScreen = screen;
+
+        taskScreen.SetActive(CurrentScreen == ScreenUI.Task);
+        createScreen.SetActive(CurrentScreen == ScreenUI.Create);
+        settingsScreen.SetActive(CurrentScreen == ScreenUI.Settings);
+
+        //invoke when not null
+        OnScreenChange?.Invoke();
     }
 
-    public void ShowCreateScreen()
-    {
-        taskScreen.SetActive(false);
-        createScreen.SetActive(true);
-        settingsScreen.SetActive(false);
-    }
-
-    public void ShowSettingsScreen()
-    {
-        taskScreen.SetActive(false);
-        createScreen.SetActive(false);
-        settingsScreen.SetActive(true);
-    }
+    //functions for button calls
+    public void ShowSettingsScreen() { SetScreen(ScreenUI.Settings); }
+    public void ShowCreateScreen() { SetScreen(ScreenUI.Create); }
 }

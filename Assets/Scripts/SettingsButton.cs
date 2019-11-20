@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class SettingsButton : MonoBehaviour
+public class SettingsButton : MonoBehaviour, IDeselectHandler
 {
     [SerializeField] private RectTransform optionsMenu;
 
@@ -25,7 +27,7 @@ public class SettingsButton : MonoBehaviour
         horizontalLayout.spacing = -iconWidth;
     }
 
-    public void ToggleOptions()
+    public void ToggleMenu()
     {
         visible = !visible;
         StartCoroutine(AnimateUI());
@@ -53,6 +55,18 @@ public class SettingsButton : MonoBehaviour
             horizontalLayout.spacing = Mathf.Lerp(horizontalLayout.spacing, targetSpacing, p);
 
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    /// <summary>
+    /// called when element is deselected
+    /// </summary>
+    /// <param name="eventData">dude idk</param>
+    public void OnDeselect(BaseEventData eventData)
+    {
+        if (visible)
+        {
+            ToggleMenu();
         }
     }
 

@@ -103,7 +103,7 @@ public class TaskList : MonoBehaviour
         int[] date = task.GetDate();
 
         options.LoadTask(task.Name, date[0], date[1], date[2], task.TagName);
-        screenController.ShowCreateScreen();
+        screenController.SetScreen(ScreenUI.Create);
     }
 
     public int PlaceTask(int date)

@@ -55,7 +55,7 @@ public class TagEdit : MonoBehaviour
         //save the new names
         taskList.SaveData();
 
-        screenControl.ShowTaskScreen();
+        screenControl.SetScreen(ScreenUI.Task);
     }
 }
 
