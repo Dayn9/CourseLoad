@@ -45,19 +45,6 @@ public class DaySelect : MonoBehaviour
         selectedMonth = DateTime.Now.Month;
     }
 
-    private void OnEnable()
-    {
-        //loop over every (row / week) 
-        for (int week = 0; week < dayTexts.Count; week++)
-        {
-            //loop over every day in the week
-            for (int i = 0; i < dayTexts[week].Length; i++)
-            {
-                dayToggles[week][i].enabled = true;
-            }
-        }
-    }
-
     public void SetDays(int month, int year)
     {
         viewingMonth = month;
@@ -75,19 +62,20 @@ public class DaySelect : MonoBehaviour
             {
                 //disable selected
                 dayToggles[week][i].interactable = false;
-                dayToggles[week][i].enabled = false;
+                dayToggles[week][i].enabled = true;
                 dayToggles[week][i].isOn = false;
                 //set blank in first week before first day
                 if (week == 0 && i < firstDayIndex)
                 {
                     dayTexts[week][i].text = "   ";
+                    dayToggles[week][i].enabled = false;
                 }
                 //set day while still not at the last day
                 else if (day <= lastDay)
                 {
                     dayTexts[week][i].text = (day < 10 ? " " : "") + day;
                     dayToggles[week][i].interactable = true;
-                    dayToggles[week][i].enabled = true;
+                    
 
                     //select the toggle if it was previously selected
                     if (selectedMonth == month && selectedDay == day)
@@ -101,6 +89,7 @@ public class DaySelect : MonoBehaviour
                 else
                 {
                     dayTexts[week][i].text = "   ";
+                    dayToggles[week][i].enabled = false;
                 }
             }
         }       
