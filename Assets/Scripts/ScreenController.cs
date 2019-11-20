@@ -14,6 +14,7 @@ public class ScreenController : MonoBehaviour
     [SerializeField] private GameObject taskScreen;
     [SerializeField] private GameObject createScreen;
     [SerializeField] private GameObject settingsScreen;
+    [SerializeField] private GameObject infoScreen;
 
     public Action OnScreenChange;
     
@@ -25,6 +26,7 @@ public class ScreenController : MonoBehaviour
         taskScreen.SetActive(true);
         createScreen.SetActive(true);
         settingsScreen.SetActive(true);
+        infoScreen.SetActive(true);
     }
 
     private void Start()
@@ -39,12 +41,14 @@ public class ScreenController : MonoBehaviour
         taskScreen.SetActive(CurrentScreen == ScreenUI.Task);
         createScreen.SetActive(CurrentScreen == ScreenUI.Create);
         settingsScreen.SetActive(CurrentScreen == ScreenUI.Settings);
+        infoScreen.SetActive(CurrentScreen == ScreenUI.Info);
 
         //invoke when not null
         OnScreenChange?.Invoke();
     }
 
     //functions for button calls
+    public void ShowInfoScreen() { SetScreen(ScreenUI.Info); }
     public void ShowSettingsScreen() { SetScreen(ScreenUI.Settings); }
     public void ShowCreateScreen() { SetScreen(ScreenUI.Create); }
 }

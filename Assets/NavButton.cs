@@ -33,6 +33,10 @@ public class NavButton : MonoBehaviour
                 case ScreenUI.Settings:
                     screenController.SetScreen(ScreenUI.Task);
                     break;
+                //Info screen -> Task Screen
+                case ScreenUI.Info:
+                    screenController.SetScreen(ScreenUI.Task);
+                    break;
             }
         });
 
