@@ -61,7 +61,8 @@ public class TaskList : MonoBehaviour
         {
             //create the new Task object
             GameObject taskUI = Instantiate(taskTemplate, content);
-            Task task = taskUI.GetComponent<Task>();
+            //Task task = taskUI.GetComponent<Task>();
+            Task task = taskUI.GetComponentInChildren<Task>();
 
             //apply variables
             task.Name = name;
@@ -132,6 +133,7 @@ public class TaskList : MonoBehaviour
         if (tasksUIs.ContainsKey(id))
         {
             GameObject taskUI = tasksUIs[id];
+            Debug.Log(taskUI.name);
             orderedDates.Remove(tasks[id].Date);
             tasks.Remove(id);
             Destroy(taskUI);
@@ -139,6 +141,8 @@ public class TaskList : MonoBehaviour
             SaveData();
         }
     }
+
+
 
     public void SaveData()
     {

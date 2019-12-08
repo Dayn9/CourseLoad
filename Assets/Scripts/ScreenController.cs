@@ -26,7 +26,7 @@ public class ScreenController : MonoBehaviour
         taskScreen.SetActive(true);
         createScreen.SetActive(true);
         settingsScreen.SetActive(true);
-        infoScreen.SetActive(true);
+        infoScreen.SetActive(true); 
     }
 
     private void Start()

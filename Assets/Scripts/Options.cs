@@ -19,7 +19,6 @@ public class Options : MonoBehaviour
     [SerializeField] private DaySelect daySelect;
     [SerializeField] private TagSelect tagSelect;
 
-
     public void LoadTask(string name, int day, int month, int year, string tagName)
     {
         nameInput.text = name;

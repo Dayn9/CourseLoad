@@ -23,7 +23,7 @@ public class SettingsButton : MonoBehaviour, IDeselectHandler
         gearIcon.eulerAngles = new Vector3(0, 0, 0);
 
         horizontalLayout = optionsMenu.GetComponent<HorizontalLayoutGroup>();
-        iconWidth = ((RectTransform)gearIcon.transform.parent).sizeDelta.y;
+        iconWidth = ((RectTransform)gearIcon.transform.parent).rect.height;
         horizontalLayout.spacing = -iconWidth;
     }
 
@@ -36,7 +36,7 @@ public class SettingsButton : MonoBehaviour, IDeselectHandler
     public IEnumerator AnimateUI()
     {
         float targetAngle = visible ? 90 : 0;
-        float targetSpacing = visible ? 25 : -iconWidth;
+        float targetSpacing = visible ? 10 : -iconWidth;
         float t = 0, p = 0;
 
         while(t < 1)
