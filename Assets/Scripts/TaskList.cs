@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -22,8 +23,9 @@ public class TaskList : MonoBehaviour
     private Dictionary<int, Task> tasks; 
     private List<int> orderedDates;
 
-    private const string GameSaveFileName = "/TasksData";
-    private const string FileExtension = ".dat";
+    private const string SAVE_FILE_NAME = "/TasksData";
+    private const string FILE_EXTENSION = ".dat";
+    private const float SHRINK_TIME = 0.2f;
 
     private int editID = -1; //-1 when not editing
 
@@ -133,16 +135,34 @@ public class TaskList : MonoBehaviour
         if (tasksUIs.ContainsKey(id))
         {
             GameObject taskUI = tasksUIs[id];
-            Debug.Log(taskUI.name);
             orderedDates.Remove(tasks[id].Date);
+
+            StartCoroutine(ShrinkTask(taskUI));
+
             tasks.Remove(id);
-            Destroy(taskUI);
             tasksUIs.Remove(id);
             SaveData();
         }
     }
 
+    private IEnumerator ShrinkTask(GameObject taskUI)
+    {
+        Destroy(taskUI.GetComponent<AspectRatioFitter>());
+        Destroy(taskUI.transform.GetChild(0).gameObject);
+        RectTransform rt = (RectTransform)taskUI.transform;
 
+        float startSize = rt.sizeDelta.y;
+        float endSize = - taskUI.GetComponentInParent<VerticalLayoutGroup>().spacing;
+        float t = 0;
+
+        while (t < SHRINK_TIME)
+        {
+            t += Time.deltaTime;
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, Mathf.Lerp(startSize, endSize, t / SHRINK_TIME));
+            yield return new WaitForEndOfFrame();
+        }
+        Destroy(taskUI);
+    }
 
     public void SaveData()
     {
@@ -170,7 +190,7 @@ public class TaskList : MonoBehaviour
 
     private void Save(SaveData[] saveData)
     {
-        string dataPath = Application.persistentDataPath + GameSaveFileName + FileExtension;
+        string dataPath = Application.persistentDataPath + SAVE_FILE_NAME + FILE_EXTENSION;
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream = File.Open(dataPath, FileMode.OpenOrCreate);
 
@@ -192,7 +212,7 @@ public class TaskList : MonoBehaviour
     private SaveData[] Load()
     {
         SaveData[] saveData = null;
-        string dataPath = Application.persistentDataPath + GameSaveFileName + FileExtension;
+        string dataPath = Application.persistentDataPath + SAVE_FILE_NAME + FILE_EXTENSION;
 
         //make sure the file actually exists
         if (File.Exists(dataPath))
