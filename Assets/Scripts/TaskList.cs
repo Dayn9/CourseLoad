@@ -56,6 +56,28 @@ public class TaskList : MonoBehaviour
         editID = -1;
     }
 
+    /// <summary>
+    /// Get the number of remaining tasks for each class
+    /// </summary>
+    /// <returns>array of remaining task counts</returns>
+    public int[] GetRemainingCounts()
+    {
+        int[] counts = new int[tagSelect.Tags.Length];
+        int i = 0;
+        foreach (Task task in tasks.Values)
+        {
+            for(i = 0; i<counts.Length; i++)
+            {
+                if (task.TagName.Equals(tagSelect.Tags[i].name))
+                {
+                    counts[i]++;
+                    break;
+                }
+            }
+        }
+        return counts;
+    }
+
     public void AddTask(string name, int day, int month, int year, string tagName)
     {
         //Creating new task

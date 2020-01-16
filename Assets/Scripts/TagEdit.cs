@@ -16,10 +16,12 @@ public class TagEdit : MonoBehaviour
     {
         //read in the color and name of each of the tags
         Tag[] tags = tagSelect.Tags;
-        for(int i = 0; i<tags.Length; i++)
+        int[] counts = taskList.GetRemainingCounts();
+        for (int i = 0; i<tags.Length; i++)
         {
             editTags[i].image.color = tags[i].color;
             editTags[i].input.text = tags[i].name;
+            editTags[i].remaining.text = counts[i].ToString();
         }
 
         colorSelect.gameObject.SetActive(false);
@@ -64,4 +66,5 @@ public class EditTag
 {
     public Image image;
     public InputField input;
+    public Text remaining;
 }
