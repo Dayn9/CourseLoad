@@ -23,7 +23,13 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
+    m_Floats:
+    - _ColorMask: 15
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     m_Colors:
-    - _Color0: {r: 0.89870507, g: 0, b: 0.42498583, a: 1}
-    - _Color1: {r: 0.89870507, g: 1, b: 0.42498583, a: 1}
+    - _Color0: {r: 0.85158014, g: 0, b: 0.6571896, a: 1}
+    - _Color1: {r: 0.85158014, g: 1, b: 0.6571896, a: 1}
