@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,15 +31,15 @@ public class ColorSelect : MonoBehaviour
         {
             sliderR = sliders[0];
             numR = nums[0];
-            bgR = sliderR.GetComponentInChildren<Image>();
+            bgR = sliderR.GetComponentsInChildren<Image>()[2];
 
             sliderG = sliders[1];
             numG = nums[1];
-            bgG = sliderG.GetComponentInChildren<Image>();
+            bgG = sliderG.GetComponentsInChildren<Image>()[2];
 
             sliderB = sliders[2];
             numB = nums[2];
-            bgB = sliderB.GetComponentInChildren<Image>();
+            bgB = sliderB.GetComponentsInChildren<Image>()[2];
         }
 
         preview.color = displayColor;
@@ -62,11 +62,23 @@ public class ColorSelect : MonoBehaviour
         numR.text = Mathf.FloorToInt(displayColor.r * 255).ToString();
         numG.text = Mathf.FloorToInt(displayColor.g * 255).ToString();
         numB.text = Mathf.FloorToInt(displayColor.b * 255).ToString();
-    }
 
-    private Color GetColor()
-    {
-        return displayColor;
+        //link target image color 
+        if (targetImage != null)
+        {
+            targetImage.color = displayColor;
+        }
+
+        bgR.materialForRendering.SetColor("_Color0", new Color(0, displayColor.g, displayColor.b));
+        bgR.materialForRendering.SetColor("_Color1", new Color(1, displayColor.g, displayColor.b));
+
+        bgG.materialForRendering.SetColor("_Color0", new Color(displayColor.r, 0, displayColor.b));
+        bgG.materialForRendering.SetColor("_Color1", new Color(displayColor.r, 1, displayColor.b));
+
+        bgB.materialForRendering.SetColor("_Color0", new Color(displayColor.r, displayColor.g, 0));
+        bgB.materialForRendering.SetColor("_Color1", new Color(displayColor.r, displayColor.g, 1));
+
+        preview.color = displayColor;
     }
 
     private void Update()
@@ -75,26 +87,7 @@ public class ColorSelect : MonoBehaviour
         displayColor.g = sliderG.value;
         displayColor.b = sliderB.value;
 
-        numR.text = Mathf.FloorToInt(displayColor.r * 255).ToString();
-        numG.text = Mathf.FloorToInt(displayColor.g * 255).ToString();
-        numB.text = Mathf.FloorToInt(displayColor.b * 255).ToString();
-
-        //link target image color 
-        if(targetImage != null)
-        {
-            targetImage.color = displayColor;
-        }
-
-        bgR.material.SetColor("_Color0", new Color(0, displayColor.g, displayColor.b));
-        bgR.material.SetColor("_Color1", new Color(1, displayColor.g, displayColor.b));
-
-        bgG.material.SetColor("_Color0", new Color(displayColor.r, 0, displayColor.b));
-        bgG.material.SetColor("_Color1", new Color(displayColor.r, 1, displayColor.b));
-
-        bgB.material.SetColor("_Color0", new Color(displayColor.r, displayColor.g, 0));
-        bgB.material.SetColor("_Color1", new Color(displayColor.r, displayColor.g, 1));
-
-        preview.color = displayColor;
+        SetColor(displayColor);
     }
 
 

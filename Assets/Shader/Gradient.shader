@@ -3,8 +3,8 @@
     Properties
     {
 		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
-		_Color0("0", Color) = (0,0,0,1)
-		_Color1("1", Color) = (1,1,1,1)
+		_Color0("_Color0", Color) = (0,0,0,1)
+		_Color1("_Color1", Color) = (1,1,1,1)
 
 			// required for UI.Mask
 			 _StencilComp("Stencil Comparison", Float) = 8
