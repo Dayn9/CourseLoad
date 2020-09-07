@@ -62,8 +62,8 @@ public class MonthSelect : MonoBehaviour
         selectedMonth += 1;
         if(selectedMonth == 12)
         {
-            selectedYear++;
-            selectedMonth = 0;
+            selectedYear++; //go to next year
+            selectedMonth = 0; //January
         }
         UpdateUI();
     }
@@ -73,8 +73,8 @@ public class MonthSelect : MonoBehaviour
         selectedMonth -= 1;
         if(selectedMonth == -1)
         {
-            selectedYear--;
-            selectedMonth = 11;
+            selectedYear--; //go to previous year
+            selectedMonth = 11; //December
         }
         UpdateUI();
     }

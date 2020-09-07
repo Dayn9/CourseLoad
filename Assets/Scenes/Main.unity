@@ -5889,9 +5889,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 533109693}
-  bgR: {fileID: 0}
-  bgG: {fileID: 0}
-  bgB: {fileID: 0}
 --- !u!114 &934512507
 MonoBehaviour:
   m_ObjectHideFlags: 0

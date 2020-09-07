@@ -13,7 +13,6 @@ public class DaySelect : MonoBehaviour
     private int selectedMonth;
     private int selectedDay;
 
-
     private ToggleGroup toggleGroup;
     private int viewingMonth;
 
@@ -48,14 +47,14 @@ public class DaySelect : MonoBehaviour
     public void SetDays(int month, int year)
     {
         viewingMonth = month;
+        toggleGroup.SetAllTogglesOff();
 
         int firstDayIndex = Zellercongruence(1, month, year);
         int lastDay = DateTime.DaysInMonth(year, month);
 
-        int week = 0;
         int day = 1;
         //loop over every (row / week) 
-        for(week = 0; week < dayTexts.Count; week++)
+        for(int week = 0; week < dayTexts.Count; week++)
         {
             //loop over every day in the week
             for (int i = 0; i < dayTexts[week].Length; i++)
@@ -76,10 +75,10 @@ public class DaySelect : MonoBehaviour
                     dayTexts[week][i].text = (day < 10 ? " " : "") + day;
                     dayToggles[week][i].interactable = true;
                     
-
                     //select the toggle if it was previously selected
-                    if (selectedMonth == month && selectedDay == day)
+                    if (selectedDay == day || (selectedDay > lastDay && day == lastDay))
                     {
+                        selectedDay = day;
                         dayToggles[week][i].Select();
                         dayToggles[week][i].isOn = true;
                     }
@@ -101,6 +100,7 @@ public class DaySelect : MonoBehaviour
         int.TryParse(displayText.text, out selectedDay);
     }
 
+    //Calculates day of the week from date
     private int Zellercongruence(int day, int month, int year)
     {
         if (month == 1)
